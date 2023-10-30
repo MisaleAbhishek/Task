@@ -1,0 +1,215 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Survey Form</title>
+    <style>
+        body {
+            background-color: hwb(211 9% 11%);
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 90%; /* Make the container wider for larger screens */
+            max-width: 600px; /* Limit the maximum width */
+            margin: 0 auto;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin: 10px 0; /* Reduce the top and bottom margin */
+            font-weight: bold;
+        }
+
+        label.inline {
+            display: inline-block;
+            margin-right: 20px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        textarea {
+            width: 100%;
+            padding: 6px;
+            margin-bottom: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-wrap: wrap; /* Wrap elements when the screen is narrow */
+            justify-content: space-between;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ccc;
+            z-index: 1;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+
+        #popupContent {
+            font-weight: normal;
+        }
+
+        #closePopup {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            padding: 10px 20px;
+            font-weight: bold;
+        }
+
+        #closePopup:hover {
+            background-color: #0056b3;
+        }
+
+        /* Header and Footer Styling */
+        header {
+            text-align: center;
+            color: #fff;
+            padding: 10px 0;
+        }
+
+        footer {
+            text-align: center;
+            color: #fff;
+            padding: 10px 0;
+        }
+
+        .my-custom-textbox {
+            width: 100%; /* Make the text area full width */
+        }
+
+        @media screen and (max-width: 768px) {
+            /* Adjust styles for screens with a maximum width of 768px */
+            .container {
+                padding: 10px; /* Reduce padding for smaller screens */
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h2>Customer Survey Form</h2>
+    </header>
+    <div class="container">
+        <form id="surveyForm">
+            <div class="input-group">
+                <div class="name-group">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" required>
+                </div>
+                <div class="email-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" required>
+                </div>
+            </div>
+    
+            <label>Is this your first time using our product and service?</label>
+            <input type="radio" name="firstTime" value="Yes" required> Yes
+            <input type="radio" name="firstTime" value="No" required> No
+    
+            <label>Would you suggest our product and service to your friends and colleagues?</label>
+            <input type="radio" name="suggest" value="Yes" required> Yes
+            <input type="radio" name="suggest" value="No" required> No
+    
+            <label>How satisfied are you with our company overall?</label>
+            <input type="radio" name="satisfaction" value="Satisfied" required> Satisfied
+            <input type="radio" name="satisfaction" value="Undecided" required> Undecided
+            <input type="radio" name="satisfaction" value="Unsatisfied" required> Unsatisfied
+    
+            <label for="suggestions">Do you have suggestions to improve our services?</label>
+            <textarea class="my-custom-textbox" rows="4"></textarea>
+            <br>
+    
+            <button type="submit" id="submitBtn">Submit</button>
+            <button type="reset" id="resetBtn">Reset</button>
+        </form>
+    </div>
+    <footer>
+    &#169; 2018 Customer Survey Form. All Rights Reserved | Designed by<span style="color: black;"> W3LAyouts </span>
+    </footer>
+    <div class="overlay" id="overlay"></div>
+    <div id="popup">
+        <h2>Survey Submission</h2>
+        <div id="popupContent"></div>
+        <button id="closePopup">Close</button>
+    </div>
+
+    <script>
+        const surveyForm = document.getElementById("surveyForm");
+        const popup = document.getElementById("popup");
+        const overlay = document.getElementById("overlay");
+        const popupContent = document.getElementById("popupContent");
+        const closePopup = document.getElementById("closePopup");
+
+        surveyForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+            popupContent.innerHTML = ""; // Clear previous content
+
+            // Gather form data and display in the popup
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const firstTime = document.querySelector('input[name="firstTime"]:checked').value;
+            const suggest = document.querySelector('input[name="suggest"]:checked').value;
+            const satisfaction = document.querySelector('input[name="satisfaction"]:checked').value;
+            const suggestions = document.querySelector('.my-custom-textbox').value;
+
+            popupContent.innerHTML += `<strong>Name:</strong> ${name}<br>`;
+            popupContent.innerHTML += `<strong>Email:</strong> ${email}<br>`;
+            popupContent.innerHTML += `<strong>Is this your first time using our product and service?</strong> ${firstTime}<br>`;
+            popupContent.innerHTML += `<strong>Would you suggest our product and service to your friends and colleagues?</strong> ${suggest}<br>`;
+            popupContent.innerHTML += `<strong>How satisfied are you with our company overall?</strong> ${satisfaction}<br>`;
+            popupContent.innerHTML += `<strong>Do you have suggestions to improve our services?</strong> ${suggestions}<br>`;
+
+            popup.style.display = "block";
+            overlay.style.display = "block";
+        });
+
+        closePopup.addEventListener("click", function () {
+            popup.style.display = "none";
+            overlay.style.display = "none";
+            surveyForm.reset();
+        });
+    </script>
+</body>
+</html>
+
